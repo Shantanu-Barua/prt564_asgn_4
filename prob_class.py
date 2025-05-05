@@ -42,6 +42,19 @@ y_encoded = LabelEncoder().fit_transform(y)
 selector = SelectKBest(score_func=f_classif, k=10)
 X_new = selector.fit_transform(X, y_encoded)
 
+# Visualize
+feature_names = X.columns[selector.get_support()]
+feature_scores = selector.scores_[selector.get_support()]
+
+# Create a bar plot
+plt.figure(figsize=(10, 6))
+sns.barplot(x=feature_scores, y=feature_names, palette='viridis')
+plt.title("Top 10 Feature Scores (SelectKBest - f_classif)")
+plt.xlabel("Score")
+plt.ylabel("Feature")
+plt.tight_layout()
+plt.show()
+
 # Step 3: Get selected feature names
 selected_features = X.columns[selector.get_support()]
 print("Selected features (SelectKBest):", selected_features.tolist())
@@ -56,7 +69,17 @@ X_train, X_test, y_train, y_test = train_test_split(X_selected, y_encoded, test_
 model = GaussianNB()
 model.fit(X_train, y_train)
 
-# Step 7: Predict and evaluate
+# Step 7: Predict and evaluate classification
 y_pred = model.predict(X_test)
 print("Classification report: \n")
 print(classification_report(y_test, y_pred, target_names=['Low', 'Medium', 'High']))
+
+report_dict = classification_report(y_test, y_pred, target_names=['Low', 'Medium', 'High'], output_dict=True)
+report_df = pd.DataFrame(report_dict).transpose()
+
+# Plot as heatmap for classification report
+plt.figure(figsize=(8, 5))
+sns.heatmap(report_df.iloc[:-1, :-1], annot=True, cmap='YlGnBu') 
+plt.title("Classification Report (Precision, Recall, F1-score)")
+plt.tight_layout()
+plt.show()
