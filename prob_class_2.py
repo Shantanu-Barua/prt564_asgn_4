@@ -60,9 +60,22 @@ wanted = ['0-7 days', 'Immature','Adult', 'Egg Peritonitis & Salpingitis', 'Coli
 age_ds_df = ms_df[wanted]
 # print(age_ds_df)
 
-# Use selected features from ms_df for classification
-X_selected = age_ds_df.drop(columns=['Death Category'])
-y = age_ds_df['Death Category']
+age_cols = ['0-7 days', 'Immature', 'Adult']
+df_age_melted = age_ds_df.melt(id_vars=['Egg Peritonitis & Salpingitis', 'Colisepticaemia', "Yolk sac infection/\nomphalitis", 'Broiler ascites', 'Red Mite', 'Neoplasm',	"Marek's\nDisease", 'Death Category'], value_vars=age_cols,
+                    var_name='Age Group')
+
+df_age_melted.drop(columns=['value'], inplace=True)
+
+
+### one hot encoding for age group###
+
+df_age_melted = pd.get_dummies(df_age_melted, columns=["Age Group"], drop_first=True, dtype=int)
+
+# print(df_age_melted)
+
+# Use selected features for classification
+X_selected = df_age_melted.drop(columns=['Death Category'])
+y = df_age_melted['Death Category']
 
 # print(X_selected)
 y_encoded = LabelEncoder().fit_transform(y)
