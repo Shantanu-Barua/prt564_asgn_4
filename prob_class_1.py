@@ -31,8 +31,8 @@ non_features = ['No.', 'Month', 'Year', 'Total death']
 X = ms_df.drop(columns=non_features)
 y = ms_df['Total death']
 
-# Optional: Convert 'y' into categories if you want to use classification
-# Example: Categorize into Low/Medium/High death
+# Convert 'y' into categories if you want to use classification
+
 y = pd.cut(y, bins=[-1, 2, 5, float('inf')], labels=['Low', 'Medium', 'High'])
 
 # Encode categorical labels
