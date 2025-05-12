@@ -23,6 +23,8 @@ ms_df = ms_df.replace(np.nan, 0)
 # nan_count = ms_df.isna().sum()
 # print(nan_count)
 
+### 2. Feature selection: Age and diseases ###
+
 ### Convert death counts to category: Low, Medium, High ###
 
 # Compute mean and standard deviation
@@ -72,6 +74,20 @@ df_age_melted.drop(columns=['value'], inplace=True)
 df_age_melted = pd.get_dummies(df_age_melted, columns=["Age Group"], drop_first=True, dtype=int)
 
 # print(df_age_melted)
+
+die_cols = ['Egg Peritonitis & Salpingitis', 'Colisepticaemia', "Yolk sac infection/\nomphalitis", 'Broiler ascites', 'Red Mite', 'Neoplasm',	"Marek's\nDisease"]
+
+df_die_melted = df_age_melted.melt(id_vars=['Death Category', 'Age Group_Adult', "Age Group_Immature"], value_vars=die_cols,
+                    var_name='Disease Group')
+
+
+
+df_die_melted.drop(columns=['value'], inplace=True)
+
+### one hot encoding for diesease group###
+df_die_melted = pd.get_dummies(df_die_melted, columns=["Disease Group"], drop_first=True, dtype=int)
+
+# print(df_die_melted)
 
 # Use selected features for classification
 X_selected = df_age_melted.drop(columns=['Death Category'])

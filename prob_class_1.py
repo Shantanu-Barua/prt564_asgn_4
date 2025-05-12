@@ -23,7 +23,6 @@ ms_df = ms_df.replace(np.nan, 0)
 # nan_count = ms_df.isna().sum()
 # print(nan_count)
 
-### Convert death counts to category: Low, Medium, High ###
 
 
 ### 1. Best feature selection: SelectKBest ###
@@ -31,7 +30,7 @@ ms_df = ms_df.replace(np.nan, 0)
 # Step 1: Drop non-feature columns
 non_features = ['No.', 'Month', 'Year', 'Total death'] 
 X = ms_df.drop(columns=non_features)
-y = ms_df['Death Category']
+y = ms_df['Total death']
 
 # Convert 'y' into categories
 y = pd.cut(y, bins=[-1, 2, 5, float('inf')], labels=['Low', 'Medium', 'High'])
