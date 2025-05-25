@@ -12,7 +12,7 @@ import seaborn as sns
 ### Intrigate air quality, Ozone datta ###
 
 ### Load the master dataset
-ms_df = pd.read_excel("AvianDataset.xlsx", sheet_name="Number")
+ms_df = pd.read_excel("AvianDataset2.xlsx")
 
 # print(ms_df)
 # nan_count = ms_df.isna().sum()
@@ -67,18 +67,15 @@ ms_df['Death Category'] = ms_df['Total death'].apply(categorize_death)
 ## print(ms_df.columns)
 
 
-## print(ms_df[['Total death', 'Death Category']])
+# ## print(ms_df[['Total death', 'Death Category']])
 
-### 3. Year, Month, Death ###
+# ### 4. Weather ###
 
-wanted = ['Year', 'Month','Death Category']
-
-ym_ds_df = ms_df[wanted]
-# print(ym_ds_df)
+## print(ms_df)
 
 
 # --- Step 2: Merge environmental data with deaths by year ---
-df_combined = ym_ds_df.copy()
+df_combined = ms_df.copy()
 df_combined = df_combined.merge(pm_df, on="Year", how="left")
 df_combined = df_combined.merge(o3_df, on="Year", how="left")
 
@@ -88,7 +85,7 @@ df_combined.fillna(df_combined.mean(numeric_only=True), inplace=True) ## Fill Na
 
 
 # Use selected features for classification
-X_selected = df_combined.drop(columns=["Year", 'Month', 'Death Category'])
+X_selected = df_combined.drop(columns=["Year", 'Month', 'Total death', 'Death Category'])
 y = df_combined['Death Category']
 
 # print(X_selected)
